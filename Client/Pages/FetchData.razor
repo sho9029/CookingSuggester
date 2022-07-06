@@ -1,0 +1,48 @@
+﻿@page "/fetchdata"
+@using CookingSuggester.Shared
+@inject HttpClient Http
+
+<PageTitle>Cooking list</PageTitle>
+
+<h1>Weather forecast</h1>
+
+@if (cookings == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Materials</th>
+                <th>Process</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cooking in cookings)
+            {
+                <tr>
+                    <td>@cooking.Name</td>
+                    <td>
+                        @foreach (var material in cooking.Materials)
+                        {
+                            <p>@material</p>
+                        }
+                    </td>
+                    <td><span style="white-space: pre-line">@cooking.Process</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Cooking[]? cookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cookings = await Http.GetFromJsonAsync<Cooking[]>("Suggestion");
+    }
+}
