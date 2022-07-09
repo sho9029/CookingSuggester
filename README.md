@@ -12,7 +12,7 @@ heroku container:login
 ```
 
 ## デプロイ
-・以下のコマンドを順に実行
+・以下のコマンドをソリューションフォルダで順に実行
 ``` Powershell
 heroku container:push web -a {ProjectId}
 heroku container:release web -a {ProjectId}
