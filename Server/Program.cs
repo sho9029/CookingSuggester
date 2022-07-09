@@ -5,11 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-object value = builder.WebHost.ConfigureKestrel(config =>
+var port = Environment.GetEnvironmentVariable("PORT");
+if (port != null)
 {
-    var port = Environment.GetEnvironmentVariable("PORT");
-    config.ListenAnyIP(Convert.ToInt32(port));
-});
+    builder.WebHost.ConfigureKestrel(config =>
+    {
+        config.ListenAnyIP(Convert.ToInt32(port));
+    });
+}
 
 var app = builder.Build();
 
