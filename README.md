@@ -1,9 +1,9 @@
 # CookingSuggester
 
 ## 事前準備
-・Heroku CLIのインストール
+・[Heroku CLIのインストール](https://devcenter.heroku.com/ja/articles/heroku-cli)
 
-・Docker Desktopのインストール
+・[Docker Desktopのインストール](https://www.docker.com/get-started/)
 
 ・以下のコマンドを順に実行
 ``` Powershell
