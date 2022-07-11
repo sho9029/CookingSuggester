@@ -15,7 +15,7 @@ public class SuggestionController : ControllerBase
         {
             Id = i,
             Name = $"料理名{i}",
-            Materials = new string[] { "材料1", "材料2" },
+            Materials = "材料1,材料2",
             Process = "手順1\n手順2\n手順3"
         }).ToArray();
     }

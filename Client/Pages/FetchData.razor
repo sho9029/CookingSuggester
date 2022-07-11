@@ -26,12 +26,15 @@ else
                 <tr>
                     <td>@cooking.Name</td>
                     <td>
-                        @foreach (var material in cooking.Materials)
-                        {
-                            <p>@material</p>
-                        }
+                        <span style="white-space: pre-line">
+                            @cooking.Materials.Replace(",", "\n")
+                        </span>
                     </td>
-                    <td><span style="white-space: pre-line">@cooking.Process</span></td>
+                    <td>
+                        <span style="white-space: pre-line">
+                            @cooking.Process
+                        </span>
+                    </td>
                 </tr>
             }
         </tbody>
