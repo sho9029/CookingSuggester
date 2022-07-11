@@ -1,5 +1,6 @@
 ﻿using CookingSuggester.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CookingSuggester.Server.Controllers;
 
@@ -7,16 +8,16 @@ namespace CookingSuggester.Server.Controllers;
 [Route("[Controller]")]
 public class SuggestionController : ControllerBase
 {
-    [HttpGet]
-    public IEnumerable<Cooking> Get()
+    private readonly CookingDbContext _context;
+
+    public SuggestionController(CookingDbContext context)
     {
-        // データベースから取得
-        return Enumerable.Range(1, 5).Select(i => new Cooking
-        {
-            Id = i,
-            Name = $"料理名{i}",
-            Materials = "材料1,材料2",
-            Process = "手順1\n手順2\n手順3"
-        }).ToArray();
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Cooking>>> Get()
+    {
+        return await _context.Cookings.ToListAsync();
     }
 }
