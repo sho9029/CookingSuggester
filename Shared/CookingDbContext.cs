@@ -9,5 +9,5 @@ public class CookingDbContext : DbContext
     { 
     }
 
-    public DbSet<Cooking> Cookings { get; set; }
+    public DbSet<Cooking> cookings { get; set; }
 }

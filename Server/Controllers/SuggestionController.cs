@@ -18,6 +18,6 @@ public class SuggestionController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Cooking>>> Get()
     {
-        return await _context.Cookings.ToListAsync();
+        return await _context.cookings.ToListAsync();
     }
 }
