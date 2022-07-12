@@ -37,3 +37,10 @@ heroku container:login
 heroku container:push web -a {ProjectId}
 heroku container:release web -a {ProjectId}
 ```
+
+## 注意点
+・以下のようなエラーが発生した場合、`heroku container:login`を実行
+``` Powershell
+unauthorized: authentication required
+ !    Error: docker push exited with Error: 1
+```
