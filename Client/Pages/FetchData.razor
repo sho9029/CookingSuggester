@@ -4,7 +4,7 @@
 
 <PageTitle>Cooking list</PageTitle>
 
-<h1>Weather forecast</h1>
+<h1>Cooking list</h1>
 
 @if (cookings == null)
 {
@@ -32,7 +32,7 @@ else
                     </td>
                     <td>
                         <span style="white-space: pre-line">
-                            @cooking.Process
+                            @cooking.Process.Replace("\\n", "\n")
                         </span>
                     </td>
                 </tr>
@@ -46,6 +46,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cookings = await Http.GetFromJsonAsync<Cooking[]>("Suggestion");
+        cookings = (await Http.GetFromJsonAsync<List<Cooking>>("Suggestion"))?.ToArray();
     }
 }

@@ -13,7 +13,7 @@ public class Cooking
     public string Name { get; set; }
 
     // カンマ区切りで複数個指定
-    [Column("material")]
+    [Column("materials")]
     public string Materials { get; set; }
 
     // 改行は"\n"を使用
