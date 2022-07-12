@@ -11,6 +11,26 @@ heroku login
 heroku container:login
 ```
 
+・herokuで新しいappを作成
+
+・作成したappでadd-onsにHeroku Postgresを追加
+
+・`Server/appsettings.json`に追加したデータベースの接続文字列を記述
+``` json
+{
+  "ConnectionStrings": {
+    "db": "Server={Host};Port={Port};Database={Database};User Id={User};Password={Password};Pooling=true;SearchPath=public"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+```
+
 ## デプロイ
 ・以下のコマンドをソリューションフォルダで順に実行
 ``` Powershell
