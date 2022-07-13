@@ -19,4 +19,8 @@ public class Cooking
     // 改行は"\n"を使用
     [Column("process")]
     public string Process { get; set; }
+
+    // base64でエンコードされた画像
+    [Column("image")]
+    public string? Image { get; set; }
 }

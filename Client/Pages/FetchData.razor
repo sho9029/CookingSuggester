@@ -46,6 +46,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cookings = (await Http.GetFromJsonAsync<List<Cooking>>("Suggestion"))?.ToArray();
+        cookings = await (await Http.PostAsJsonAsync("Suggestion/exclude", "")).Content.ReadAsAsync<Cooking[]>();
     }
 }
