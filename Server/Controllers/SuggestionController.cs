@@ -34,15 +34,37 @@ public class SuggestionController : ControllerBase
     }
 
     [HttpPost("exclude")]
-    public async Task<IEnumerable<Cooking>> Post([FromBody] string query)
+    public async Task<Cooking> Post([FromBody] string query = "")
     {
-        if (string.IsNullOrEmpty(query))
+        if (string.IsNullOrWhiteSpace(query))
         {
-            return await _context.cookings.ToArrayAsync();
+            return await RandomCooking();
         }
 
-        var ids = query.Split(',').Select(i => int.Parse(i));
-        return await _context.cookings
-            .Where(i => !ids.Contains(i.Id)).ToArrayAsync();
+        var random = new Random();
+        var ids = query.Split(',').Distinct().Select(i => int.Parse(i));
+        var exCount = ids.Count();
+        var count = await GetCount();
+        
+        if (count - exCount <= 0)
+        {
+            throw new ArgumentException();
+        }
+
+        var n = random.Next(count - exCount);
+        while (ids.Any(i => i == n))
+        {
+            n++;
+        }
+
+        return await _context.cookings.SingleAsync(i => i.Id == n);
+    }
+
+    [HttpPost("random")]
+    public async Task<Cooking> RandomCooking()
+    {
+        var random = new Random();
+        var n = random.Next(await GetCount());
+        return await _context.cookings.SingleAsync(i => i.Id == n);
     }
 }

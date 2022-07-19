@@ -1,12 +1,14 @@
 ﻿@page "/fetchdata"
 @using CookingSuggester.Shared
 @inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorage
 
 <PageTitle>Cooking list</PageTitle>
 
 <h1>Cooking list</h1>
 
-@if (cookings == null)
+@if (cooking == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -21,31 +23,66 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var cooking in cookings)
-            {
-                <tr>
-                    <td>@cooking.Name</td>
-                    <td>
-                        <span style="white-space: pre-line">
-                            @cooking.Materials.Replace(",", "\n")
-                        </span>
-                    </td>
-                    <td>
-                        <span style="white-space: pre-line">
-                            @cooking.Process.Replace("\\n", "\n")
-                        </span>
-                    </td>
-                </tr>
-            }
+            <tr>
+                <td>@cooking.Name</td>
+                <td>
+                    <span style="white-space: pre-line">
+                        @cooking.Materials.Replace(",", "\n")
+                    </span>
+                </td>
+                <td>
+                    <span style="white-space: pre-line">
+                        @cooking.Process.Replace("\\n", "\n")
+                    </span>
+                </td>
+            </tr>
         </tbody>
     </table>
 }
 
 @code {
-    private Cooking[]? cookings;
+    private Cooking? cooking;
 
     protected override async Task OnInitializedAsync()
     {
-        cookings = await (await Http.PostAsJsonAsync("Suggestion/exclude", "")).Content.ReadAsAsync<Cooking[]>();
+        var onDisplay = await SessionStorage.GetItemAsync<string>("onDisplay");
+        if (string.IsNullOrWhiteSpace(onDisplay))
+        {
+            // 新規セッション
+            var displayed = await LocalStorage.GetItemAsync<string>("displayed") ?? "";
+            var count = await Http.GetFromJsonAsync<int>("Suggestion/count");
+            if (count - displayed.Split(",").Distinct().Count() <= 0)
+            {
+                await LocalStorage.ClearAsync();
+                displayed = "";
+            }
+
+            try
+            {
+                cooking = await (await Http.PostAsJsonAsync("Suggestion/exclude", displayed))
+                    .Content.ReadAsAsync<Cooking>();
+            }
+            catch (ArgumentException)
+            {
+                await LocalStorage.ClearAsync();
+                await OnInitializedAsync();
+                return;
+            }
+
+            await AppendToLocalStorageAsync(cooking.Id);
+            await SessionStorage.SetItemAsync<string>("onDisplay", cooking.Id.ToString());
+        }
+        else
+        {
+            // 既存セッション
+            cooking = await Http.GetFromJsonAsync<Cooking>($"Suggestion/get/{onDisplay}");
+        }
+    }
+
+    private async Task AppendToLocalStorageAsync(int id)
+    {
+        var displayed = await LocalStorage.GetItemAsync<string>("displayed") ?? "";
+        displayed += $"{(string.IsNullOrWhiteSpace(displayed) ? "" : ",")}{id.ToString()}";
+        await LocalStorage.SetItemAsync("displayed", displayed);
     }
 }
