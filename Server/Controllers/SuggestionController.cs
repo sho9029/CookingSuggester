@@ -16,19 +16,25 @@ public class SuggestionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cooking>>> Get()
+    public async Task<IEnumerable<Cooking>> Get()
     {
         return await _context.cookings.ToArrayAsync();
     }
 
     [HttpGet("get/{id}")]
-    public async Task<ActionResult<Cooking>> Get(int id)
+    public async Task<Cooking> Get(int id)
     {
         return await _context.cookings.SingleAsync(i => i.Id == id);
     }
 
+    [HttpGet("count")]
+    public async Task<int> GetCount()
+    {
+        return await _context.cookings.CountAsync();
+    }
+
     [HttpPost("exclude")]
-    public async Task<ActionResult<IEnumerable<Cooking>>> Post([FromBody] string query)
+    public async Task<IEnumerable<Cooking>> Post([FromBody] string query)
     {
         if (string.IsNullOrEmpty(query))
         {
