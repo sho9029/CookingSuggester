@@ -2,13 +2,13 @@
 @using CookingSuggester.Shared
 @inject HttpClient Http
 
-<PageTitle>Index</PageTitle>
+<PageTitle>必要な材料</PageTitle>
 
-<h1>必要な材料</h1>
+<h2>必要な材料</h2>
 
 @if (materialList == null)
 {
-	<p><em>Loading...</em></p>
+	<p><em>ロード中...</em></p>
 }
 else
 {

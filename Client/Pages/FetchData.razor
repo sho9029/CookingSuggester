@@ -4,43 +4,32 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject Blazored.SessionStorage.ISessionStorageService SessionStorage
 
-<PageTitle>Cooking list</PageTitle>
-
-<h1>Cooking list</h1>
+<PageTitle>@title</PageTitle>
 
 @if (cooking == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>ロード中...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Materials</th>
-                <th>Process</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@cooking.Name</td>
-                <td>
-                    <span style="white-space: pre-line">
-                        @cooking.Materials.Replace(",", "\n")
-                    </span>
-                </td>
-                <td>
-                    <span style="white-space: pre-line">
-                        @cooking.Process.Replace("\\n", "\n")
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <h2>@cooking.Name</h2>
+    <h4>材料</h4>
+    <div style="white-space: pre-line;margin-left: 0.5em">
+        <span>
+            @cooking.Materials.Replace(",", "\n")
+        </span>
+    </div>
+    <br>
+    <h4>手順</h4>
+    <div style="white-space: pre-line;margin-left: 0.5em">
+        <span>
+            @cooking.Process.Replace("\\n", "\n")
+        </span>
+    </div>
 }
 
 @code {
+    private string title = "ロード中";
     private Cooking? cooking;
 
     protected override async Task OnInitializedAsync()
@@ -74,9 +63,11 @@ else
         }
         else
         {
-            // 既存セッション
+            // 既存セッション(リロード時)
             cooking = await Http.GetFromJsonAsync<Cooking>($"Suggestion/get/{onDisplay}");
         }
+
+        title = cooking!.Name;
     }
 
     private async Task AppendToLocalStorageAsync(int id)
