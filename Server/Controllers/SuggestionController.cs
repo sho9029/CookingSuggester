@@ -67,4 +67,10 @@ public class SuggestionController : ControllerBase
         var n = random.Next(await GetCount());
         return await _context.cookings.SingleAsync(i => i.Id == n);
     }
+
+    [HttpGet("materials/{id}")]
+    public async Task<Materials> GetMaterials(int id)
+    {
+        return await _context.materials.SingleAsync(i => i.Id == id);
+    }
 }
