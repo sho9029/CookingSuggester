@@ -10,4 +10,5 @@ public class CookingDbContext : DbContext
     }
 
     public DbSet<Cooking> cookings { get; set; }
+    public DbSet<Materials> materials { get; set; }
 }
