@@ -23,4 +23,7 @@ public class Cooking
     // base64でエンコードされた画像
     [Column("image")]
     public string? Image { get; set; }
+
+    [Column("material_set")]
+    public int MaterialSet { get; set; }
 }
