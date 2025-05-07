@@ -1,5 +1,7 @@
 # CookingSuggester
 
+学部の授業で作成
+
 ## 事前準備
 ・[Heroku CLIのインストール](https://devcenter.heroku.com/ja/articles/heroku-cli)
 
